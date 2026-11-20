@@ -1,0 +1,28 @@
+---
+- name: Базовая настройка сервера
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Обновление кеша apt и установка пакетов
+      ansible.builtin.apt:
+        name:
+          - git
+          - make
+          - nodejs
+        state: present
+        update_cache: yes
+      tags:
+        - packages
+
+    - name: Создание пользователей
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        shell: /bin/bash
+      loop:
+        - arya
+        - sansa
+        - tirion
+      tags:
+        - users
